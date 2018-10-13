@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /****************************************************************************
- *   Copyright (c) 2017 Michael Shomin. All rights reserved.
+ *   Copyright (c) 2018 John A. Dougherty. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,28 +34,17 @@
  * In addition Supplemental Terms apply.  See the SUPPLEMENTAL file.
  ****************************************************************************/
 -->
+
 <launch>
-  <arg name="write_access" default="true"/>
 
-  <node pkg="snav_ros" name="snav_interface_node" type="snav_interface_node" output="screen">
-    <param name="loop_frequency" value="100.0"/>
-    <param name="low_freq_data_rate" value="5.0"/>
+  <arg name="record" default="false"/>
 
-    <param name="base_link_frame" value="/base_link"/>
+  <node name="rviz" pkg="rviz" type="rviz" output="screen"/>
+  <node name="tk_top_gui" pkg="snav_gui" type="tk_top_gui.py" output="screen"/>
+  <node name="waypoint_marker_publisher" pkg="snav_gui" type="waypoint_marker_publisher.py" output="screen"/>
+  <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen"/>
+  <node name="record" pkg="rosbag" type="record" if="$(arg record)"
+    args="-a -j"/>
 
-    <param name="write_access" value="$(arg write_access)"/>
-    <param name="high_level_actions_only" value="true"/>
-    <param name="tx_config_rate" value="200"/>
-    <param name="tx_config_desired_mode" value="SN_VIO_POS_HOLD_MODE"/>
-    <param name="tx_config_use_traj_tracking" value="true"/>
-    <param name="tx_config_waypoint_frame_parent" value="ESTIMATION"/>
-    <param name="planner_config_traj_type" value="MIN_SNAP"/>
-    <param name="rx_config_rate" value="200"/>
-
-    <param name="broadcast_tf" value="true"/>
-    <param name="broadcast_des_tf" value="true"/>
-    <param name="broadcast_waypoint_tf" value="true"/>
-    <param name="publish_pose" value="true"/>
-    <param name="publish_des_pose" value="false"/>
-  </node>
 </launch>
+

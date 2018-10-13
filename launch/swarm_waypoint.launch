@@ -1,0 +1,12 @@
+<launch>
+    <arg name="noDrones" default="3"/>
+    <group ns="$(eval 'drone0' + str(arg ('noDrones')))">
+        <node name="waypoint_marker_publisher_$(arg noDrones)" pkg="snav_gui" type="waypoint_marker_publisher.py" output="screen">
+        </node>
+    </group>
+
+    <include file="$(find snav_gui)/launch/swarm_waypoint.launch" if="$(eval arg('noDrones') - 1 > 0)">
+        <arg name="noDrones" value="$(eval arg('noDrones') - 1)"/>
+    </include>
+
+</launch>
